@@ -1,0 +1,22 @@
+version: '3.8' # Specify the Compose file format version
+services:
+
+  # Service 1: The Backend API
+  backend:
+    build: 
+      context: ./backend # Build the image from the 'backend' folder
+    # Expose the internal port for the frontend to access
+    expose:
+      - "5000"
+
+  # Service 2: The Frontend Web App
+  frontend:
+    build:
+      context: ./frontend # Build the image from the 'frontend' folder
+    ports:
+      - "8080:8000" # Map host port 8080 to container port 8000
+    # The 'backend' is accessible by its service name inside this container's network
+    environment:
+      - BACKEND_URL=http://backend:5000
+    depends_on:
+      - backend # Ensures the backend starts before the frontend tries to connect
